@@ -1,6 +1,7 @@
 from optparse import OptionParser
 
 from knitterstream.protocol import E6000Serial
+from knitterstream.pattern import E6000Pattern
 
 import logging
 import signal
@@ -57,6 +58,9 @@ def main():
     # initialize our protocol
     serial = E6000Serial(options.serial)
 
+    # and our pattern
+    pattern = E6000Pattern(options.dir)
+
     # install a TERM handler to toggle our loop variable
     def term_handler(signum, frame):
         global loop
@@ -67,6 +71,7 @@ def main():
     # forever...
     try:
         while loop is True:
+            pattern.process()
             time.sleep(1)
     except KeyboardInterrupt:
         logger.info("Caught keyboard interrupt, exiting...")

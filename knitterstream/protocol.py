@@ -23,14 +23,14 @@ class E6000Serial(object):
 
     # These are the templates used for constructing the data we will
     # send to the E6000.
-    # colour: the number of colours in this pattern
+    # colours: the number of colours in this pattern
     # columns: the number of columns in this pattern
     # rows: the number of rows in this pattern
     #
     # The data is a series of "0", "1", "2" or "3" characters (yes
     # ascii strings, weird) to represent which colour to make the
     # foreground. There is no RLE or anything, just straight data.
-    HEADER_FORMAT = "%(colour)s %(columns)3s %(rows)3s"
+    HEADER_FORMAT = "%(colours)s %(columns)3s %(rows)3s"
     DATA_FORMAT = "%(header)s %(data)s\x03"
 
     def __init__(self, port):
@@ -44,3 +44,21 @@ class E6000Serial(object):
             logger.info("Closing E6000 serial interface...")
             self.serial.close()
             logger.info(" `-> Closed!")
+
+    def send(self, colours, columns, rows, data):
+        if self.serial:
+            # build our header data
+            header = E6000Serial.HEADER_FORMAT % {
+                    'colours': colours,
+                    'columns': columns,
+                    'rows': rows
+                    }
+
+            # and the full payload
+            payload = "%(header)s %(data)s\x03" % {
+                    'header': header,
+                    'data': ''.join([stitch for stitch in data]),
+                    }
+
+            # write it
+            self.serial.write(payload)
