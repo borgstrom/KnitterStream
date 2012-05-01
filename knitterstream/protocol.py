@@ -57,7 +57,7 @@ class E6000Serial(object):
             # and the full payload
             payload = "%(header)s %(data)s\x03" % {
                     'header': header,
-                    'data': ''.join([stitch for stitch in data]),
+                    'data': ''.join([str(stitch) for stitch in data]),
                     }
 
             # write it
