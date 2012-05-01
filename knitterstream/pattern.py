@@ -26,8 +26,15 @@ class E6000Pattern(object):
         pimage.putpalette(PALETTE)
 
         # open our image
-        image = Image.open(file).convert("RGB").quantize(palette=pimage)
+        image = Image.open(file)
+        
+        # quantize it
+        image = image.quantize(palette=pimage)
 
+        # rotate it so that we can knit in order
+        image = image.rotate(180)
+
+        # get our pixel data
         data = [pixel for pixel in image.getdata()]
 
         # return colours, columns (width), rows (height), [data]
