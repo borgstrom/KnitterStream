@@ -2,12 +2,14 @@ from optparse import OptionParser
 
 from knitterstream.protocol import E6000Serial
 
+import logging
+import signal
 import time
 import sys
 import os
 
-import logging
 logger = logging.getLogger(__name__)
+loop = True
 
 def main():
     """
@@ -52,10 +54,19 @@ def main():
 
     logger.info("KnitterStream - Starting up...")
 
+    # initialize our protocol
     serial = E6000Serial(options.serial)
 
+    # install a TERM handler to toggle our loop variable
+    def term_handler(signum, frame):
+        global loop
+        loop = False
+        logger.info("Caught TERM signal, exiting...")
+    signal.signal(signal.SIGTERM, term_handler)
+
+    # forever...
     try:
-        while True:
+        while loop is True:
             time.sleep(1)
     except KeyboardInterrupt:
         logger.info("Caught keyboard interrupt, exiting...")

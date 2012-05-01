@@ -40,6 +40,7 @@ class E6000Serial(object):
         logger.info(" `-> Initialized!")
 
     def close(self):
-        logger.info("Closing E6000 serial interface...")
-        self.serial.close()
-        logger.info(" `-> Closed!")
+        if self.serial:
+            logger.info("Closing E6000 serial interface...")
+            self.serial.close()
+            logger.info(" `-> Closed!")
