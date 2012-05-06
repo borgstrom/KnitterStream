@@ -22,8 +22,12 @@ order that we need them to happen.
 It watches a directory for new PNG files, sorted by filename (so use
 timestamps to guarantee processing order), and for each file it finds
 it will quantize the image to our standard 3-colour pallete (black,
-red & white), rotates the image 180 degrees, packs the data into the
+red & white), rotates the image 180 degrees, pack the data into the
 format wanted by the E6000 and finally writes it to the E6000.
+
+The PNG files should be a 1:1 mapping of pixel to stitch. If you want
+a pattern with 90 columns & 120 rows then the PNG should be 90x120 as
+well.
 
 
 [1]: http://www.softbyte.co.uk/dk7.htm
