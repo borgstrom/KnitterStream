@@ -11,7 +11,8 @@
 // > = >>> (three arrows, start)
 // A = ABC
 #define NUM_BUTTONS 13
-          int button_pins[NUM_BUTTONS] = {  13,  12,  11,  10,  9,   8,   7,   6,   5,   4,   3,   2,   1  };
+
+          int button_pins[NUM_BUTTONS] = {  12,  11,  10,   9,   8,   7,   6,   3,   2,  14,  15,  16,  17 };
 unsigned char button_cmds[NUM_BUTTONS] = { 'N', 'E', 'B', '-', '0', '3', '1', '5', '4', '9', '8', '>', 'A' };
 
 void setup() {
