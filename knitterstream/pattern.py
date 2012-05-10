@@ -1,4 +1,7 @@
 from PIL import Image, ImageDraw
+import os
+import logging
+logger = logging.getLogger(__name__)
 
 PALETTE = [
         0,   0,   0,   # black
@@ -16,20 +19,40 @@ class E6000Pattern(object):
         self.dir = dir
 
     def process(self):
-        for dirname, dirnames, filenames in os.walk(self.dir):
+        """
+        Process walks our directory looking for new files. When it
+        finds them it runs them through process_file.
+
+        It returns a list of the results from process_file
+        """
+        # make sure our "PROCESSED" directory exists
+        processed_dir = os.path.join(self.dir, "PROCESSED")
+        if not os.path.isdir(processed_dir):
+            os.mkdir(processed_dir)
+
+        # process
+        for dirpath, dirnames, filenames in os.walk(self.dir):
             for filename in filenames:
                 logger.info("Processing new file: %s" % filename)
+                src_file = os.path.join(dirpath, filename)
+                file_data = self.process_file(src_file)
+
+                logger.info(" `-> Processed! Moving to processed dir...")
+                #os.rename(src_file, os.path.join(processed_dir, filename))
+
+                return file_data
 
     def process_file(self, file):
-        # a palette image to use for quantization
-        pimage = Image.new("P", (1, 1), 0)
-        pimage.putpalette(PALETTE)
-
         # open our image
         image = Image.open(file)
-        
-        # quantize it
-        image = image.quantize(palette=pimage)
+
+        if image.mode in ("RGB", "L"):
+            # a palette image to use for quantization
+            pimage = Image.new("P", (1, 1), 0)
+            pimage.putpalette(PALETTE)
+
+            # quantize it
+            image = image.quantize(palette=pimage)
 
         # rotate it so that we can knit in order
         image = image.rotate(180)

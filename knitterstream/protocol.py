@@ -1,8 +1,34 @@
+import time
 import serial
-
 import logging
 logger = logging.getLogger(__name__)
  
+class ArduinoSerial(object):
+    """
+    This class encapsulates the functionality for interfacing with
+    our Arduino that is hooked up to the E6000
+    """
+    def __init__(self, port):
+        logger.info("Initializing Arduino serial interface on port %s..." % port)
+        self.serial = serial.Serial(port, 9600)
+
+        # http://stackoverflow.com/a/2308078/877024
+        # allow the arduino to reset
+        time.sleep(1)
+        self.serial.setDTR(level=0)
+        time.sleep(1)
+
+        logger.info(" `-> Initialized!")
+
+    def send(self, command):
+        if isinstance(command, list):
+            for cmd in command:
+                self.send(cmd)
+                time.sleep(1)
+            return
+        logger.debug("Sending: %s to the Arduino" % command)
+        self.serial.write(command)
+
 class E6000Serial(object):
     """
     This class encapsulates the functionality for interfacing with
@@ -34,7 +60,7 @@ class E6000Serial(object):
     DATA_FORMAT = "%(header)s %(data)s\x03"
 
     def __init__(self, port):
-        logger.info("Initializing E6000 serial interface...")
+        logger.info("Initializing E6000 serial interface on port %s..." % port)
         self.serial = serial.Serial(port, 1200,
                 parity=serial.PARITY_EVEN)
         logger.info(" `-> Initialized!")
