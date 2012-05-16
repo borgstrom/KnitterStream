@@ -62,7 +62,7 @@ def main():
 
     # initialize our protocol
     e6000 = E6000Serial(options.e6000)
-    arduino = ArduinoSerial("COM5")
+    arduino = ArduinoSerial(options.arduino)
 
     # and our pattern
     pattern = E6000Pattern(options.dir)
