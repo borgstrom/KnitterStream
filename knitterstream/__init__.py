@@ -103,6 +103,14 @@ def main():
                     arduino.send("O")
 
                     time.sleep(5)
+
+                    # before we go back to ready state we need to
+                    # first change the carriage direction and turn
+                    # off the colour change option
+                    arduino.send("C")
+                    arduino.send("S")
+
+                    # return to ready state
                     state = "ready"
 
             if state == "ready":
