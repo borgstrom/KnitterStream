@@ -21,6 +21,12 @@ It exposes a very simple protocol that signals which button should be
 triggered by receiving a single byte over the serial port of the
 Arduino itself. See the code for the current map of button codes.
 
+### Arduino Hardware
+The hardware portion of the Arduino is comprised of a Uno R3, the
+[Robot Builder’s Shield][rbs], a 4067b multiplexer (as we need more pins
+that the Arduino has), lots of 4N37 optocouplers and other odds and
+ends for interfacing with the e6000.
+
 
 Python Code
 -----------
@@ -47,3 +53,4 @@ well.
 [sl]: http://www.sidlee.com/
 [fb]: http://fatbox.ca/
 [lu]: http://thelunchsite.com/
+[rbs]: http://robotxdesigns.ca/2011/05/30/250/
