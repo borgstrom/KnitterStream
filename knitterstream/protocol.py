@@ -62,7 +62,9 @@ class E6000Serial(object):
     def __init__(self, port):
         logger.info("Initializing E6000 serial interface on port %s..." % port)
         self.serial = serial.Serial(port, 1200,
-                parity=serial.PARITY_EVEN)
+                parity=serial.PARITY_EVEN,
+                timeout=0.1,
+                writeTimeout=None)
         logger.info(" `-> Initialized!")
 
     def close(self):
@@ -70,6 +72,9 @@ class E6000Serial(object):
             logger.info("Closing E6000 serial interface...")
             self.serial.close()
             logger.info(" `-> Closed!")
+
+    def read(self):
+        return self.serial.read(1)
 
     def send(self, colours, columns, rows, data):
         if self.serial:
