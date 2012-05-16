@@ -32,7 +32,6 @@ const unsigned char mio_cmds[MIO_BUTTONS] = { 'N', 'E', 'B', '-', '0', '3', '1',
 const int analog_pins[ANALOG_BUTTONS]          = {  14,  15,  16,  17 };
 const unsigned char analog_cmds[ANALOG_BUTTONS] = { 'G', 'C', 'S', 'O' };
 
-
 // motor control pins
 #define M1_PWM 5
 #define M1_DIR 4
@@ -64,15 +63,15 @@ int toggle_dir = 1;
 void toggle_switch() {
   Serial.print("Toggling switch: ");
   if (toggle_dir == 1) {
+    Serial.println("Forward");
     digitalWrite(M1_DIR, LOW);
     analogWrite(M1_PWM, 255);
-    Serial.println("Forward");
     delay(2200);
     toggle_dir = 2;
   } else {
+    Serial.println("Reverse");
     digitalWrite(M1_DIR, HIGH);
     analogWrite(M1_PWM, 0);
-    Serial.println("Reverse");
     delay(2200);
     toggle_dir = 1;
   }
@@ -88,6 +87,13 @@ void loop() {
   if (Serial.available() > 0) {
     // read the byte
     int incomingByte = Serial.read();
+
+    // handle our special case
+    // toggling the switch
+    if (incomingByte == 'T') {
+        toggle_switch();
+        return;
+    }
     
     // try to find the matching command and pin
     int found = -1;
