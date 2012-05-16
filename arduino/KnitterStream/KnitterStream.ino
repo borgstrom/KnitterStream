@@ -23,25 +23,6 @@
 
 #define MIO_PIN 12
 const int mio_channels[] = { 8, 9, 10, 11 };
-const int mio_mux[16][4] = {
-  {0,0,0,0}, //channel 0
-  {1,0,0,0}, //channel 1
-  {0,1,0,0}, //channel 2
-  {1,1,0,0}, //channel 3
-  {0,0,1,0}, //channel 4
-  {1,0,1,0}, //channel 5
-  {0,1,1,0}, //channel 6
-  {1,1,1,0}, //channel 7
-  {0,0,0,1}, //channel 8
-  {1,0,0,1}, //channel 9
-  {0,1,0,1}, //channel 10
-  {1,1,0,1}, //channel 11
-  {0,0,1,1}, //channel 12
-  {1,0,1,1}, //channel 13
-  {0,1,1,1}, //channel 14
-  {1,1,1,1}  //channel 15
-};
-
 
 #define MIO_BUTTONS 13
 const int mio_pins[MIO_BUTTONS]           = {  0,   1,   2,    3,   4,   5,   6,   7,   8,   9,  10,  11,  12 };
@@ -55,16 +36,18 @@ const unsigned char analog_cmds[ANALOG_BUTTONS] = { 'G', 'C', 'S', 'O' };
 // motor control pins
 #define M1_PWM 5
 #define M1_DIR 4
-byte M1_speed = 255;
 
 void setup() {
   // set the pin mode
-  //for (int i = 0; i < NUM_BUTTONS; i++) {
-    //pinMode(button_pins[i], OUTPUT);
-  //}
-  
+  int i;
+
   // the io pins on the cd4067b
-  for (int i = 8; i <= 12; i++) {
+  for (i = 8; i <= 12; i++) {
+    pinMode(i, OUTPUT);
+  }
+
+  // the analog pins
+  for (i = 14; i <= 17; i++) {
     pinMode(i, OUTPUT);
   }
   
@@ -118,14 +101,6 @@ void loop() {
         Serial.print(" - ");
         
         // now set the correct output channel
-        /*
-        for (int x = 0; x < 4; x++) {
-          Serial.print(mio_channels[x]);
-          Serial.print("=");
-          Serial.print(mio_mux[mio_pins[i]][x]);
-          Serial.print(" ");
-          digitalWrite(mio_channels[x], mio_mux[mio_pins[i]][x]);
-        }*/
         digitalWrite(8, mio_pins[i] & 1);
         digitalWrite(9, (mio_pins[i] >> 1) & 1);
         digitalWrite(10, (mio_pins[i] >> 2) & 1);
