@@ -74,11 +74,37 @@ def main():
         logger.info("Caught TERM signal, exiting...")
     signal.signal(signal.SIGTERM, term_handler)
 
-    # forever...
+    # set our baseline
     state = "ready"
     pattern_data = None
+    row_count = 0
+    expected_rows = 0
+
+    # forever...
     try:
         while loop is True:
+            if state == "knitting":
+                # while knitting we'll get null bytes for each pass
+                # that the carriage makes a pass
+                if e6000.read():
+                    row_count += 1
+                else:
+                    continue
+
+                # status update?
+                if row_count % 10 == 0:
+                    logger.info("%d rows to go..." % expected_rows - row_count)
+
+                # when we reach 1 before our expected rows
+                # then we need to sleep for 1 second and press the
+                # one way button so it stops on the way back
+                if row_count == (expected_rows - 1):
+                    time.sleep(1)
+                    arduino.send("O")
+
+                    time.sleep(5)
+                    state = "ready"
+
             if state == "ready":
                 logger.info("Ready to load a new pattern!")
 
@@ -92,10 +118,10 @@ def main():
 
                 arduino.send(">")
 
-                raw_input("Flip the switch to program mode, press enter when ready... ")
-                state = "program1"
+                # toggle the switch
+                arduino.send("T")
+                time.sleep(5)
 
-            if state == "program1":
                 # send the commands to prepare for pattern loading
                 logger.info("Setting up the E6000 for programming...")
                 arduino.send([
@@ -114,10 +140,11 @@ def main():
                 e6000.send(pattern_data[0], pattern_data[1], pattern_data[2], pattern_data[3])
                 logger.info(" `-> Done!")
 
-                raw_input("Flip the switch to knit mode, press enter when ready... ")
-                state = "program2"
+                # toggle the switch back
+                arduino.send("T")
+                time.sleep(5)
 
-            if state == "program2":
+                # finish the programming
                 arduino.send([
                     "N",
                     "1", "9", "8", "E",
@@ -135,14 +162,26 @@ def main():
                     "E",
                     ])
 
-                raw_input("Press the MOTOR ONE WAY button, then the MOTOR GO button")
+                time.sleep(1)
+
+                # press motor one way, then motor go
+                arduino.send([
+                    "O",
+                    "G"
+                    ])
+                time.sleep(5)
 
                 arduino.send([
                     "E",
                     "E"
                     ])
 
-                raw_input("Press the MOTOR ONE WAY button, then the MOTOR GO button")
+                # press motor one way, then motor go
+                arduino.send([
+                    "O",
+                    "G"
+                    ])
+                time.sleep(5)
 
                 arduino.send([
                     "E",
@@ -154,11 +193,27 @@ def main():
                     "E"
                     ])
 
-                raw_input("Press the MOTOR GO button")
+                time.sleep(1)
 
+                # set our new state
                 state = "knitting"
 
-            time.sleep(1)
+                # save the number of rows we're expected to knit for
+                # this pattern, this is the number of rows from the
+                # pattern data multiplied by the number of colours
+                # and finally multiplied by 2 (since we get a row
+                # count for each pass of the carriage)
+                expected_rows = pattern_data[0] * pattern_data[2] * 2
+                row_count = 0
+
+                # GO!
+                arduino.send([
+                    "G"
+                    ])
+
+            # wait for a short amount of time
+            time.sleep(0.1)
+
     except KeyboardInterrupt:
         logger.info("Caught keyboard interrupt, exiting...")
 
