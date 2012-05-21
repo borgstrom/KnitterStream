@@ -4,9 +4,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 PALETTE = [
-        0,   0,   0,   # black
-        255, 0,   0,   # red
         255, 255, 255, # white
+        255, 0,   0,   # red
+        0,   0,   0,   # black
         ] + [0, ] * 253 * 3
 
 class E6000Pattern(object):
