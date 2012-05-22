@@ -83,6 +83,7 @@ def main():
     # forever...
     try:
         while loop is True:
+            """
             if state == "knitting":
                 # while knitting we'll get null bytes for each pass
                 # that the carriage makes a pass
@@ -112,6 +113,7 @@ def main():
 
                     # return to ready state
                     state = "ready"
+            """
 
             if state == "ready":
                 logger.info("Ready to load a new pattern!")
@@ -204,7 +206,7 @@ def main():
                 time.sleep(1)
 
                 # set our new state
-                state = "knitting"
+                #state = "knitting"
 
                 # save the number of rows we're expected to knit for
                 # this pattern, this is the number of rows from the
