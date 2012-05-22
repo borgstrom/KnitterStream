@@ -20,6 +20,12 @@ class ArduinoSerial(object):
 
         logger.info(" `-> Initialized!")
 
+    def close(self):
+        if self.serial:
+            logger.info("Closing Arduino serial interface...")
+            self.serial.close()
+            logger.info(" `-> Closed!")
+
     def send(self, command):
         if isinstance(command, list):
             for cmd in command:
