@@ -38,7 +38,7 @@ class E6000Pattern(object):
                 file_data = self.process_file(src_file)
 
                 logger.info(" `-> Processed! Moving to processed dir...")
-                #os.rename(src_file, os.path.join(processed_dir, filename))
+                os.rename(src_file, os.path.join(processed_dir, filename))
 
                 return file_data
 
