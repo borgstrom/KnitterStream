@@ -219,6 +219,8 @@ def main():
                     "G"
                     ])
 
+                raw_input("The pattern is now being knitted. Press the One-Way button when you reach %d row count, then press any key to process the next pattern" % ((expected_rows - 1),))
+
             # wait for a short amount of time
             time.sleep(0.1)
 
@@ -226,3 +228,4 @@ def main():
         logger.info("Caught keyboard interrupt, exiting...")
 
     e6000.close()
+    arduino.close()
