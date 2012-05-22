@@ -58,21 +58,21 @@ void setup() {
   Serial.begin(9600);
 }
 
-int toggle_dir = 1;
+int toggle_dir = 2;
 
 void toggle_switch() {
   Serial.print("Toggling switch: ");
   if (toggle_dir == 1) {
     Serial.println("Forward");
     digitalWrite(M1_DIR, LOW);
-    analogWrite(M1_PWM, 255);
-    delay(2200);
+    analogWrite(M1_PWM, 254);
+    delay(3750);
     toggle_dir = 2;
   } else {
     Serial.println("Reverse");
     digitalWrite(M1_DIR, HIGH);
-    analogWrite(M1_PWM, 0);
-    delay(2200);
+    analogWrite(M1_PWM, 1);
+    delay(3750);
     toggle_dir = 1;
   }
   
