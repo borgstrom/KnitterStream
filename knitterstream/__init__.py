@@ -174,8 +174,10 @@ def main():
 
                 time.sleep(1)
 
-                # press motor one way, then motor go
+                # press motor switch color, motor direction, motor one way, then motor go
                 arduino.send([
+                    "C",
+                    "S",
                     "O",
                     "G"
                     ])
