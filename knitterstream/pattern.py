@@ -3,11 +3,6 @@ import os
 import logging
 logger = logging.getLogger(__name__)
 
-PALETTE = [
-        0,   0,   0,   # black
-        255, 0,   0,   # red
-        255, 255, 255, # white
-        ] + [0, ] * 253 * 3
 
 class E6000Pattern(object):
     """
@@ -46,19 +41,22 @@ class E6000Pattern(object):
         # open our image
         image = Image.open(file)
 
-        if image.mode in ("RGB", "L"):
-            # a palette image to use for quantization
-            pimage = Image.new("P", (1, 1), 0)
-            pimage.putpalette(PALETTE)
-
-            # quantize it
-            image = image.quantize(palette=pimage)
-
         # rotate it so that we can knit in order
         image = image.rotate(180)
 
         # get our pixel data
-        data = [pixel for pixel in image.getdata()]
+        data = []
+        for pixel in image.getdata():
+            # the order of colours on the knitting machine are:
+            # 1 = colour
+            # 2 = black
+            # 3 = white
+            if pixel == (0, 0, 0):
+                data.append(2)
+            elif pixel == (255, 255, 255):
+                data.append(3)
+            else:
+                data.append(1)
 
         # return colours, columns (width), rows (height), [data]
         return (3,) + image.size + (data,)
