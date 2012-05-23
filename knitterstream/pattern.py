@@ -52,11 +52,11 @@ class E6000Pattern(object):
             # 2 = white
             # 3 = black
             if pixel == (0, 0, 0):
-                data.append(3)
+                data.append("3")
             elif pixel == (255, 255, 255):
-                data.append(2)
+                data.append("2")
             else:
-                data.append(1)
+                data.append("1")
 
         # return colours, columns (width), rows (height), [data]
         return (3,) + image.size + (data,)
