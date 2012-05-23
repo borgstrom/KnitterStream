@@ -27,6 +27,9 @@ class E6000Pattern(object):
 
         # process
         for dirpath, dirnames, filenames in os.walk(self.dir):
+            if dirpath == processed_dir:
+                continue
+
             for filename in filenames:
                 src_file = os.path.join(dirpath, filename)
                 logger.info("Processing new file: %s" % src_file)
