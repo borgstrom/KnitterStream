@@ -48,15 +48,15 @@ class E6000Pattern(object):
         data = []
         for pixel in image.getdata():
             # the order of colours on the knitting machine are:
-            # 1 = colour
-            # 2 = white
-            # 3 = black
+            # 0 = colour
+            # 1 = white
+            # 2 = black
             if pixel in ((0, 0, 0), (0, 0, 1), (0, 1, 0), (1, 0, 0), (1, 1, 0), (1, 0, 1), (0, 1, 1), (1, 1, 1)):
-                data.append(3)
-            elif pixel in ((255, 255, 255), (255, 255, 254), (255, 254, 255), (254, 255, 255), (254, 254, 254)):
                 data.append(2)
-            else:
+            elif pixel in ((255, 255, 255), (255, 255, 254), (255, 254, 255), (254, 255, 255), (254, 254, 254)):
                 data.append(1)
+            else:
+                data.append(0)
 
         # return colours, columns (width), rows (height), [data]
         return (3,) + image.size + (data,)
