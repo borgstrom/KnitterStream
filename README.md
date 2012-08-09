@@ -54,3 +54,15 @@ well.
 [fb]: http://fatbox.ca/
 [lu]: http://thelunchsite.com/
 [rbs]: http://robotxdesigns.ca/2011/05/30/250/
+
+
+Processing Code
+-----------
+Processing code applies a knitted texture to an image. See www.knitterstream.com for example.
+We used it to convert a 90 pixel wide graphic to an image the looks like a real life scarf.
+To use, place an image into Source folder and change "imageName" to the file you want to convert.
+Launch the script and you'll get the result in "Converted" folder.
+
+The texture is based on Joel Glovier's texture. http://dribbble.com/shots/382725-Knit-Pray-Love and there's some room for imporvement when it comes to tiling the texture.
+Right now, it's not a 1x1 ratio, so the pattern has to be stretched vertically, which decreases type legibility, especially if it's a pixel font.
+
