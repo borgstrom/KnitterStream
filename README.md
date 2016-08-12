@@ -46,7 +46,7 @@ a pattern with 90 columns & 120 rows then the PNG should be 90x120 as
 well.
 
 
-[ks]: http://www.knitterstream.com
+[ks]: http://knitterstream.borgstrom.ca/
 [dk]: http://www.softbyte.co.uk/dk7.htm
 [c2]: http://c2mtl.com/
 [e6000]: http://www.knittingmachinemuseum.com/Passap_E6000.php
